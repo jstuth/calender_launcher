@@ -92,19 +92,24 @@
 - (void)requestCalendarAccess:(FlutterMethodCall*)call result:(FlutterResult)result
 {
     EKEventStore *eventStore = [[EKEventStore alloc] init];
-    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError * _Nullable error) {
+    EKEventStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError * _Nullable error) {
         if (granted && error == nil) {
             result(@{
-                     @"granted" : @(granted),
-                     @"error" : @""
-                     });
+                    @"granted" : @(granted),
+                    @"error" : @""
+                    });
         } else {
             result(@{
-                     @"granted" : @(granted),
-                     @"error" : error ? error.localizedDescription : @"Access not granted!"
-                     });
+                    @"granted" : @(granted),
+                    @"error" : error ? error.localizedDescription : @"Access not granted!"
+                    });
         }
-    }];
+    };
+    if (@available(iOS 17.0, *)) {
+        [eventStore requestWriteOnlyAccessToEventsWithCompletion:handler];
+    } else {
+        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:handler];
+    }
 }
 
 - (void)eventEditViewController:(nonnull EKEventEditViewController *)controller
