@@ -11,12 +11,12 @@ class CalendarData {
   final String location;
 
   CalendarData({
-    this.title,
-    this.start,
-    this.end,
-    this.description,
-    this.locationTitle,
-    this.location,
+    required this.title,
+    required this.start,
+    required this.end,
+    required this.description,
+    required this.locationTitle,
+    required this.location,
   });
 
   Map<String, dynamic> toJson() => {
@@ -36,7 +36,7 @@ class CalendarLauncher {
   static Future<bool> get requestCalendarAccess async {
     final version = await _channel
         .invokeMethod<Map<dynamic, dynamic>>('requestCalendarAccess');
-    return version['granted'];
+    return version?['granted'];
   }
 
   static Future<void> showCalendar(CalendarData calendarData) async {
