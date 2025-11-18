@@ -3,26 +3,26 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class CalendarData {
-  final String title;
-  final DateTime start;
-  final DateTime end;
-  final String description;
-  final String locationTitle;
-  final String location;
+  final String? title;
+  final DateTime? start;
+  final DateTime? end;
+  final String? description;
+  final String? locationTitle;
+  final String? location;
 
   CalendarData({
-    required this.title,
-    required this.start,
-    required this.end,
-    required this.description,
-    required this.locationTitle,
-    required this.location,
+    this.title,
+    this.start,
+    this.end,
+    this.description,
+    this.locationTitle,
+    this.location,
   });
 
   Map<String, dynamic> toJson() => {
         'title': title,
-        'start': start.toUtc().toIso8601String(),
-        'end': end.toUtc().toIso8601String(),
+        'start': start?.toUtc().toIso8601String(),
+        'end': end?.toUtc().toIso8601String(),
         'description': description,
         'location': location,
         // 'locationTitle': locationTitle,
@@ -30,13 +30,12 @@ class CalendarData {
 }
 
 class CalendarLauncher {
-  static const _channel =
-      const MethodChannel('de.parallax3d/calendar_launcher');
+  static const _channel = MethodChannel('de.parallax3d/calendar_launcher');
 
   static Future<bool> get requestCalendarAccess async {
     final version = await _channel
         .invokeMethod<Map<dynamic, dynamic>>('requestCalendarAccess');
-    return version?['granted'];
+    return version?['granted'] ?? false;
   }
 
   static Future<void> showCalendar(CalendarData calendarData) async {
