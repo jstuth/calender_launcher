@@ -26,6 +26,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
+        applicationId "de.parallax3d.calendar_launcher"
         minSdkVersion 16
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
