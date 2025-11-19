@@ -4,18 +4,18 @@ version '1.0-SNAPSHOT'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:8.13.1'
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -23,7 +23,7 @@ apply plugin: 'com.android.library'
 
 android {
     namespace "de.parallax3d.calendar_launcher"
-    compileSdkVersion 30
+    compileSdkVersion 36
 
     defaultConfig {
         minSdkVersion 16
