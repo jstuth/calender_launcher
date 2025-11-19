@@ -17,37 +17,27 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** CalendarLauncherPlugin */
 public class CalendarLauncherPlugin implements MethodCallHandler {
 
-    private Registrar mRegistrar;
+    private static final String CHANNEL = "de.parallax3d/calendar_launcher";
 
-    /**
-     * Plugin registration.
-     */
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(),
-                "de.parallax3d/calendar_launcher");
-        CalendarLauncherPlugin instance = new CalendarLauncherPlugin(registrar);
-        channel.setMethodCallHandler(instance);
-    }
-
-    private CalendarLauncherPlugin(Registrar registrar) {
-        this.mRegistrar = registrar;
-    }
-
-    @SuppressWarnings("NullableProblems")
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
-        if (call.method.equals("showSystemCalender")) {
-            showSystemCalendar(call, result);
-        } else if (call.method.equals("requestCalendarAccess")) {
-            requestCalendarAccess(result);
-        } else {
-            result.notImplemented();
-        }
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+        super.configureFlutterEngine(flutterEngine);
+        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
+            .setMethodCallHandler(
+            (call, result) -> {
+                if (call.method.equals("showSystemCalender")) {
+                    showSystemCalendar(call, result);
+                } else if (call.method.equals("requestCalendarAccess")) {
+                    requestCalendarAccess(result);
+                } else {
+                    result.notImplemented();
+                }
+            }
+        );
     }
 
     private void requestCalendarAccess(Result result) {
